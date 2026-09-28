@@ -826,15 +826,6 @@ html:not(.js) .check p { color: #fff; }
 .footer__col a { color: var(--text); text-decoration: none; transition: color .3s ease; }
 .footer__col a:hover { color: #fff; }
 .footer__note { margin: 0; font-size: .88rem; color: var(--text-soft); }
-.footer__big { border-top: 1px solid var(--line); overflow: hidden; text-align: center; line-height: .8; padding-top: 1.5rem; }
-.footer__big span {
-  display: inline-block;
-  font: 900 clamp(2.4rem, 8.7vw, 9.4rem)/.8 var(--f-display);
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, .16);
-}
 .footer__legal { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding-block: 1.6rem 2rem; border-top: 1px solid var(--line); font-size: .8rem; color: var(--text-soft); }
 .footer__legal p { margin: 0; }
 .to-top { color: #fff; text-decoration: none; }

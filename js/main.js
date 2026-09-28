@@ -502,10 +502,6 @@
       y: 30, autoAlpha: 0, duration: 1, ease: 'expo.out', stagger: 0.08,
       scrollTrigger: { trigger: '.archetypes', start: 'top 92%', once: true },
     });
-    gsap.from('.footer__big span', {
-      yPercent: 60, autoAlpha: 0, duration: 1.5, ease: 'expo.out',
-      scrollTrigger: { trigger: '.footer__big', start: 'top 95%', once: true },
-    });
 
     // leve parallax da foto do hero e da mentora
     gsap.to('.hero__photo img', { yPercent: 10, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
