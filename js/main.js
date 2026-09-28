@@ -13,7 +13,7 @@
   const finePointer = matchMedia('(pointer: fine)').matches;
   const fmt = new Intl.NumberFormat('pt-BR');
 
-  const WA_NUMBER = '5511996458310';
+  const WA_NUMBER = '5511932688548';
   const WA_BASE = 'Olá, vim pelo site e quero reservar minha vaga para a Imersão Milhas com Fran Carrillo';
   const waLink = (msg) => `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
 
