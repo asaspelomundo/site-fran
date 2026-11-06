@@ -526,10 +526,13 @@ html:not(.js) .check p { color: #fff; }
 .mentor__media { position: relative; }
 .mentor__photo { aspect-ratio: 2 / 3; overflow: hidden; background: #3b3b3d; }
 .mentor__photo img { width: 100%; height: 100%; object-fit: cover; }
+/* selo branco dentro da foto, no fundo escuro à direita da cabeça (longe do rosto e das mãos) */
 .mentor__seal {
   position: absolute;
-  right: -48px; bottom: 8%;
-  width: clamp(120px, 12vw, 170px);
+  right: 5%; top: 4%;
+  width: 24%; max-width: 150px;
+  opacity: .9;
+  pointer-events: none;
   animation: spin 26s linear infinite;
 }
 .mentor__text .h2 { margin-bottom: 1.8rem; }
@@ -818,21 +821,13 @@ html:not(.js) .check p { color: #fff; }
 /* ==========================================================================
    ÚLTIMA CHAMADA (seção vermelha)
    ========================================================================== */
-.lastcall { position: relative; overflow: hidden; background: var(--red); color: var(--ink); padding-bottom: clamp(4rem, 8vw, 7rem); }
-.lastcall__marquee { overflow: hidden; border-bottom: 2px solid var(--ink); }
-.lastcall__track { display: flex; width: max-content; animation: slide 22s linear infinite; }
-.lastcall__track span {
-  font: 900 clamp(4rem, 13vw, 12rem)/1 var(--f-display);
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: transparent;
-  -webkit-text-stroke: 2px var(--ink);
-  padding: 1.2rem 0 .8rem;
-}
-.lastcall__inner { display: grid; grid-template-columns: 1.3fr .7fr; gap: 3rem; align-items: end; padding-top: clamp(3rem, 6vw, 5rem); }
-.lastcall__title { font: 900 clamp(2.8rem, 6.2vw, 6.2rem)/.9 var(--f-display); text-transform: uppercase; color: var(--ink); }
-.lastcall__title em { color: #fff; font-size: .9em; }
-.lastcall__side p { font: 600 1.1rem/1.5 var(--f-sans); margin-bottom: 1.6rem; }
+.lastcall { position: relative; background: var(--paper); color: #3b3935; padding-block: clamp(5rem, 9vw, 8rem); }
+.lastcall .kicker { color: #6f695f; }
+.lastcall__inner { display: grid; grid-template-columns: 1.25fr .75fr; gap: clamp(2.5rem, 6vw, 6rem); align-items: end; }
+.lastcall__title { font: 800 clamp(2.4rem, 4.8vw, 4.6rem)/.95 var(--f-display); text-transform: uppercase; letter-spacing: -.005em; color: var(--ink); text-wrap: balance; }
+.lastcall__title em { color: var(--red-deep); font-size: .95em; }
+.lastcall__side { padding-left: clamp(0rem, 2.4vw, 2rem); border-left: 1px solid rgba(17, 18, 18, .14); }
+.lastcall__side p { font: 400 1.05rem/1.65 var(--f-sans); margin-bottom: 1.8rem; max-width: 40ch; }
 
 /* ==========================================================================
    RODAPÉ
@@ -1040,7 +1035,7 @@ html:not(.js) .check p { color: #fff; }
 
 /* chamada final */
 .lastcall__btns { display: flex; flex-wrap: wrap; gap: .8rem; }
-.btn--line-ink { border: 2px solid var(--ink); color: var(--ink); }
+.btn--line-ink { border: 1px solid rgba(17, 18, 18, .4); color: var(--ink); }
 .btn--line-ink::before { background: var(--ink); }
 .btn--line-ink:hover { color: #fff; }
 
@@ -1068,7 +1063,8 @@ html:not(.js) .check p { color: #fff; }
   .learn__grid, .faq__grid, .mentor__grid, .lastcall__inner { grid-template-columns: 1fr; }
   .learn__head, .faq__head { position: static; }
   .mentor__media { max-width: 460px; }
-  .mentor__seal { right: 10px; bottom: -40px; width: 110px; }
+  .mentor__seal { width: 24%; max-width: 110px; }
+  .lastcall__side { padding-left: 0; padding-top: 2rem; border-left: 0; border-top: 1px solid rgba(17, 18, 18, .14); }
 
   .tags { grid-template-columns: 1fr; gap: 90px; max-width: 320px; }
   .tags__rail { display: none; }
