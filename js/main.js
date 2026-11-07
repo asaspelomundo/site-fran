@@ -15,9 +15,20 @@
   const LINKS = {
     curso: '',            // checkout ou página do Curso online
     comunidade: '',       // página de adesão da Comunidade Milhas com Fran
-    'ebook-acumulo': '',  // E-book: Acúmulo de milhas no dia a dia
-    'ebook-cartoes': '',  // E-book: Cartões, benefícios e programas
-    'ebook-uso': '',      // E-book: Uso, transferência e avaliação de pontos
+  };
+
+  // E-books: a pessoa preenche nome, e-mail e telefone no próprio cartão; os dados
+  // chegam por e-mail (FormSubmit) e o botão de download é liberado.
+  // Na primeira vez que alguém enviar, o FormSubmit manda um e-mail de ativação para
+  // o endereço abaixo: é preciso clicar em "Activate Form" uma única vez.
+  const LEAD_ENDPOINT = 'https://formsubmit.co/ajax/voeasaspelomundo@gmail.com';
+
+  // arquivo: caminho do PDF (ex.: 'assets/ebooks/acumulo-de-milhas.pdf') ou link externo.
+  // Enquanto estiver vazio, depois do formulário o botão leva ao WhatsApp da Fran.
+  const EBOOKS = {
+    'ebook-acumulo': { titulo: 'Acúmulo de milhas no dia a dia', arquivo: '' },
+    'ebook-cartoes': { titulo: 'Cartões, benefícios e programas', arquivo: '' },
+    'ebook-uso': { titulo: 'Uso, transferência e avaliação de pontos', arquivo: '' },
   };
 
   const WA_MESSAGES = {
@@ -25,9 +36,6 @@
     duvida: 'Olá, Fran! Vim pelo site e tenho uma dúvida.',
     curso: 'Olá, Fran! Vim pelo site e quero saber mais sobre o Curso online: Pontos, Milhas, Cartões e Estratégias.',
     comunidade: 'Olá, Fran! Vim pelo site e quero conhecer a Comunidade Milhas com Fran.',
-    'ebook-acumulo': 'Olá, Fran! Vim pelo site e quero saber mais sobre o e-book "Acúmulo de milhas no dia a dia".',
-    'ebook-cartoes': 'Olá, Fran! Vim pelo site e quero saber mais sobre o e-book "Cartões, benefícios e programas".',
-    'ebook-uso': 'Olá, Fran! Vim pelo site e quero saber mais sobre o e-book "Uso, transferência e avaliação de pontos".',
     imersao: 'Olá, Fran! Vim pelo site e quero reservar minha vaga na Imersão Milhas com Fran Carrillo',
     imersaoSemTurma: 'Olá, Fran! Vim pelo site e quero saber as próximas turmas da Imersão Milhas com Fran Carrillo.',
   };
@@ -217,6 +225,159 @@
   $$('.check').forEach((c) => checkIO.observe(c));
 
   /* ==========================================================================
+     E-BOOKS: formulário no próprio cartão → e-mail → download
+     ========================================================================== */
+  const LEAD_KEY = 'fran-lead';
+  const readLead = () => { try { return JSON.parse(localStorage.getItem(LEAD_KEY)) || {}; } catch (e) { return {}; } };
+  const saveLead = (d) => { try { localStorage.setItem(LEAD_KEY, JSON.stringify(d)); } catch (e) { /* sem armazenamento: segue normal */ } };
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const maskPhone = (v) => {
+    const d = v.replace(/\D/g, '').slice(0, 11);
+    if (d.length <= 2) return d.length ? `(${d}` : '';
+    if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+    if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+    return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+  };
+  const ICON_DL = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>';
+  const ICON_OUT = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+
+  $$('[data-ebook]').forEach((openBtn) => {
+    const key = openBtn.dataset.ebook;
+    const book = EBOOKS[key];
+    const tag = openBtn.closest('.tag');
+    if (!book || !tag) return;
+
+    const form = document.createElement('form');
+    form.className = 'tag__form';
+    form.id = `form-${key}`;
+    form.noValidate = true;
+    form.hidden = true;
+    form.setAttribute('aria-label', `Receber o e-book ${book.titulo}`);
+    form.innerHTML = `
+      <label class="tag__field"><span>Nome</span><input name="nome" autocomplete="name" maxlength="80" required></label>
+      <label class="tag__field"><span>E-mail</span><input name="email" type="email" autocomplete="email" maxlength="120" required></label>
+      <label class="tag__field"><span>Telefone</span><input name="telefone" type="tel" autocomplete="tel" placeholder="(11) 90000-0000" required></label>
+      <input class="tag__honey" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <p class="tag__msg" role="alert"></p>
+      <div class="tag__actions">
+        <button type="submit" class="tag__btn">Enviar ${ICON_DL}</button>
+        <button type="button" class="tag__back">Voltar</button>
+      </div>
+      <p class="tag__note">Ao enviar, você concorda em receber contatos da equipe da Fran.</p>`;
+    const done = document.createElement('div');
+    done.className = 'tag__done';
+    done.hidden = true;
+    done.tabIndex = -1;
+    openBtn.after(form, done);
+    openBtn.setAttribute('aria-controls', form.id);
+
+    const { nome, email, telefone, _honey: honey } = form.elements;
+    const msg = $('.tag__msg', form);
+    const send = $('button[type="submit"]', form);
+    const sendLabel = send.innerHTML;
+
+    const setOpen = (open) => {
+      tag.classList.toggle('is-open', open);
+      openBtn.hidden = open;
+      form.hidden = !open;
+      openBtn.setAttribute('aria-expanded', String(open));
+      if (open) {
+        const saved = readLead();
+        if (!nome.value && saved.nome) nome.value = saved.nome;
+        if (!email.value && saved.email) email.value = saved.email;
+        if (!telefone.value && saved.telefone) telefone.value = saved.telefone;
+        nome.focus({ preventScroll: true });
+      } else {
+        msg.textContent = '';
+        openBtn.focus({ preventScroll: true });
+      }
+    };
+    const fail = (input, text) => {
+      input.setAttribute('aria-invalid', 'true');
+      msg.textContent = text;
+      input.focus();
+    };
+    const showDone = (d) => {
+      const p = document.createElement('p');
+      p.className = 'tag__ok';
+      const who = document.createElement('strong');
+      who.textContent = d.nome.split(' ')[0];
+      p.append('Pronto, ', who, book.arquivo ? '! Seu e-book está liberado.' : '! Recebemos seus dados. Chame a Fran no WhatsApp para receber o e-book.');
+      const a = document.createElement('a');
+      a.className = 'tag__btn';
+      a.target = '_blank';
+      a.rel = 'noopener';
+      if (book.arquivo) {
+        a.href = book.arquivo;
+        a.setAttribute('download', '');
+        a.innerHTML = `Baixar e-book ${ICON_DL}`;
+      } else {
+        a.href = waLink(`Olá, Fran! Acabei de pedir o e-book "${book.titulo}" pelo site.`);
+        a.innerHTML = `Chamar no WhatsApp ${ICON_OUT}`;
+      }
+      done.replaceChildren(p, a);
+      form.hidden = true;
+      done.hidden = false;
+      tag.classList.remove('is-open');
+      tag.classList.add('is-done');
+      done.focus({ preventScroll: true });
+    };
+
+    openBtn.addEventListener('click', () => setOpen(true));
+    $('.tag__back', form).addEventListener('click', () => setOpen(false));
+    form.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+    [nome, email, telefone].forEach((i) => i.addEventListener('input', () => i.removeAttribute('aria-invalid')));
+    telefone.addEventListener('input', () => { telefone.value = maskPhone(telefone.value); });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (send.disabled) return;
+      msg.textContent = '';
+      const d = {
+        nome: nome.value.trim().replace(/\s+/g, ' '),
+        email: email.value.trim(),
+        telefone: telefone.value.trim(),
+      };
+      if (d.nome.length < 2) return fail(nome, 'Digite seu nome.');
+      if (!EMAIL_RE.test(d.email)) return fail(email, 'Digite um e-mail válido.');
+      if (d.telefone.replace(/\D/g, '').length < 10) return fail(telefone, 'Digite seu telefone com DDD.');
+      if (honey.value) return showDone(d); // preenchido por robô: não envia
+
+      send.disabled = true;
+      send.textContent = 'Enviando…';
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 15000);
+      try {
+        const res = await fetch(LEAD_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            _subject: `Site da Fran · e-book "${book.titulo}" · ${d.nome}`,
+            _template: 'table',
+            _captcha: 'false',
+            _replyto: d.email,
+            'E-book': book.titulo,
+            Nome: d.nome,
+            'E-mail': d.email,
+            Telefone: d.telefone,
+            Origem: location.origin + location.pathname,
+          }),
+          signal: ctrl.signal,
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        saveLead(d);
+        showDone(d);
+      } catch (err) {
+        msg.textContent = 'Não foi possível enviar agora. Confira sua internet e tente de novo.';
+      } finally {
+        clearTimeout(timer);
+        send.disabled = false;
+        send.innerHTML = sendLabel;
+      }
+    });
+  });
+
+  /* ==========================================================================
      E-BOOKS: etiquetas de bagagem (pêndulo que reage à rolagem e ao mouse)
      ========================================================================== */
   const tags = $$('.tag').map((el, i) => ({ el, a: 0, v: 0, phase: i * 1.7 }));
@@ -227,7 +388,8 @@
     tags.forEach((t) => {
       let lastX = null;
       t.el.addEventListener('pointermove', (e) => {
-        if (e.target.closest('.tag__btn')) { lastX = null; return; } // não balança sob o botão
+        // não balança sob o botão nem com o formulário aberto
+        if (t.el.classList.contains('is-open') || e.target.closest('.tag__btn')) { lastX = null; return; }
         if (lastX !== null) t.v += Math.max(-0.4, Math.min(0.4, (e.clientX - lastX) * 0.015));
         lastX = e.clientX;
       });
@@ -239,6 +401,12 @@
       lastY = y;
       if (active) {
         tags.forEach((t, i) => {
+          if (t.el.classList.contains('is-open')) { // parada para a pessoa digitar
+            t.v = 0;
+            t.a = Math.abs(t.a) < 0.05 ? 0 : t.a * 0.85;
+            t.el.style.transform = t.a ? `rotate(${t.a.toFixed(2)}deg)` : '';
+            return;
+          }
           t.v += Math.max(-1.4, Math.min(1.4, dy * 0.012)) * (i % 2 ? 1 : 0.8);
           const idle = Math.sin(time / 1100 + t.phase) * 0.9;
           t.v += (-(t.a - idle) * 0.014) - t.v * 0.045;

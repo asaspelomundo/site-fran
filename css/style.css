@@ -431,6 +431,7 @@ html:not(.js) .check p { color: #fff; }
   position: relative;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  align-items: start; /* a etiqueta com formulário aberto cresce sozinha */
   gap: 2rem;
   padding-top: 90px;
   max-width: 1100px;
@@ -459,7 +460,7 @@ html:not(.js) .check p { color: #fff; }
   padding: 3.6rem 1.7rem 1.6rem;
   background: var(--paper);
   color: var(--ink);
-  clip-path: polygon(16% 0, 84% 0, 100% 11%, 100% 100%, 0 100%, 0 11%);
+  clip-path: polygon(16% 0, 84% 0, 100% 38px, 100% 100%, 0 100%, 0 38px); /* canto fixo: não cresce com o formulário aberto */
   border-radius: 0 0 10px 10px;
   box-shadow: 0 30px 50px -25px rgba(0, 0, 0, .8);
 }
@@ -500,6 +501,56 @@ html:not(.js) .check p { color: #fff; }
 }
 .tag__btn:hover { background: var(--red); }
 .tag__btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: square; }
+button.tag__btn { border: 0; cursor: pointer; }
+.tag__btn:disabled { background: #55585a; cursor: progress; }
+.tag__btn[hidden], .tag__form[hidden], .tag__done[hidden] { display: none; }
+
+/* formulário do e-book, dentro da etiqueta */
+.tag__form, .tag__done { margin-top: 1.2rem; animation: tag-in .45s var(--ease) both; }
+.tag__form { display: grid; gap: .75rem; }
+@keyframes tag-in { from { opacity: 0; transform: translateY(8px); } }
+.tag__field span {
+  display: block;
+  margin-bottom: .35rem;
+  font: 500 .62rem/1 var(--f-mono);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(17, 18, 18, .62);
+}
+.tag__field input {
+  display: block;
+  width: 100%;
+  padding: .7rem .75rem;
+  border: 1px solid rgba(17, 18, 18, .24);
+  border-radius: 3px;
+  background: #fff;
+  color: var(--ink);
+  font: 500 16px/1.2 var(--f-sans); /* 16px: o iPhone não dá zoom ao tocar */
+  transition: border-color .2s ease;
+}
+.tag__field input::placeholder { color: rgba(17, 18, 18, .35); }
+.tag__field input:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
+.tag__field input[aria-invalid="true"] { border-color: var(--red-deep); box-shadow: 0 0 0 1px var(--red-deep); }
+.tag__honey { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.tag__msg { margin: 0; font: 600 .82rem/1.35 var(--f-sans); color: var(--red-deep); }
+.tag__msg:empty { display: none; }
+.tag__actions { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.1rem; }
+.tag__actions .tag__btn { margin-top: 0; }
+.tag__back {
+  padding: .4rem 0;
+  border: 0;
+  background: none;
+  color: rgba(17, 18, 18, .66);
+  font: 600 .8rem/1 var(--f-sans);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.tag__back:hover { color: var(--ink); }
+.tag__note { margin: 0; font: 400 .72rem/1.4 var(--f-sans); color: rgba(17, 18, 18, .55); }
+.tag__done:focus { outline: none; }
+.tag__ok { margin: 0; font: 500 .95rem/1.45 var(--f-sans); color: var(--ink); }
+.tag__ok strong { color: var(--red-deep); }
 .tag__bars {
   display: block;
   height: 34px;
