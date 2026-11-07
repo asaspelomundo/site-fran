@@ -21,11 +21,12 @@ Preços do curso e da comunidade **não aparecem** na página até serem aprovad
 
 ## E-books
 
-Cada cartão tem o botão **Pegar meu e-book**: abre um formulário no próprio cartão (nome, e-mail e telefone). Ao enviar, os dados chegam por e-mail em **voeasaspelomundo@gmail.com** (via FormSubmit) e aparece o botão **Baixar e-book**.
+Cada cartão tem o botão **Pegar meu e-book**: abre um formulário no próprio cartão (nome, e-mail e telefone). Ao enviar, os dados vão para o **Google Forms** "Pedidos de e-book" da conta **voeasaspelomundo@gmail.com** (aba Respostas, ou a planilha ligada a ele) e aparece o botão **Baixar e-book**.
 
-- **Ativação (uma vez só):** no primeiro envio, o FormSubmit manda para voeasaspelomundo@gmail.com um e-mail pedindo confirmação. Clique em **Activate Form**; a partir daí todos os pedidos chegam. Esse primeiro envio não é entregue, então faça um envio de teste.
-- **PDFs:** coloque os arquivos em `assets/ebooks/` e preencha `arquivo` em `EBOOKS`, no topo de `js/main.js` (ex.: `arquivo: 'assets/ebooks/acumulo-de-milhas.pdf'`). Também aceita um link externo. Enquanto `arquivo` estiver vazio, depois do formulário o botão leva ao WhatsApp da Fran.
-- Para trocar o e-mail de destino, altere `LEAD_ENDPOINT` no mesmo arquivo.
+- **Configuração obrigatória do Google Forms:** em Configurações → Respostas, "Coletar endereços de e-mail" precisa estar em **Não coletar**. Se o formulário exigir login, as respostas vindas do site **não são salvas** (e o site não tem como perceber).
+- **Aviso de novos pedidos:** no Google Forms, aba Respostas → ⋮ → "Receber notificações por e-mail para novas respostas".
+- **Não apague nem recrie as perguntas** (nome, email, telefone, ebook): cada uma tem um código (`entry.…`) usado em `LEAD_FIELDS`, no topo de `js/main.js`. Mudar o texto da pergunta não tem problema.
+- **PDFs:** ficam em `assets/ebooks/` e são indicados em `arquivo`, em `EBOOKS` (mesmo arquivo). Se `arquivo` ficar vazio, depois do formulário o botão leva ao WhatsApp da Fran.
 
 ## Atualizar as turmas da imersão
 

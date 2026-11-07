@@ -18,10 +18,18 @@
   };
 
   // E-books: a pessoa preenche nome, e-mail e telefone no próprio cartão; os dados
-  // chegam por e-mail (FormSubmit) e o botão de download é liberado.
-  // Na primeira vez que alguém enviar, o FormSubmit manda um e-mail de ativação para
-  // o endereço abaixo: é preciso clicar em "Activate Form" uma única vez.
-  const LEAD_ENDPOINT = 'https://formsubmit.co/ajax/voeasaspelomundo@gmail.com';
+  // vão para o Google Forms "Pedidos de e-book" (conta voeasaspelomundo@gmail.com)
+  // e o botão de download é liberado.
+  // No Google Forms, "Coletar endereços de e-mail" precisa estar em "Não coletar":
+  // se o formulário exigir login, as respostas vindas do site não são salvas.
+  const LEAD_ENDPOINT = 'https://docs.google.com/forms/d/e/1FAIpQLSc6CSTAYiGUq7GareyYyml7BQ-4OhbICZvsyCK8JBNq22FRDQ/formResponse';
+  // códigos de cada pergunta do formulário (mudam se a pergunta for apagada e recriada)
+  const LEAD_FIELDS = {
+    nome: 'entry.228385181',
+    email: 'entry.1751069576',
+    telefone: 'entry.1412160591',
+    ebook: 'entry.1378154897',
+  };
 
   // arquivo: caminho do PDF (ex.: 'assets/ebooks/acumulo-de-milhas.pdf') ou link externo.
   // Enquanto estiver vazio, depois do formulário o botão leva ao WhatsApp da Fran.
@@ -348,23 +356,19 @@
       const ctrl = new AbortController();
       const timer = setTimeout(() => ctrl.abort(), 15000);
       try {
-        const res = await fetch(LEAD_ENDPOINT, {
+        // O Google não deixa o site ler a resposta (modo no-cors): só uma falha de
+        // rede da pessoa cai no catch abaixo.
+        await fetch(LEAD_ENDPOINT, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({
-            _subject: `Site da Fran · e-book "${book.titulo}" · ${d.nome}`,
-            _template: 'table',
-            _captcha: 'false',
-            _replyto: d.email,
-            'E-book': book.titulo,
-            Nome: d.nome,
-            'E-mail': d.email,
-            Telefone: d.telefone,
-            Origem: location.origin + location.pathname,
+          mode: 'no-cors',
+          body: new URLSearchParams({
+            [LEAD_FIELDS.nome]: d.nome,
+            [LEAD_FIELDS.email]: d.email,
+            [LEAD_FIELDS.telefone]: d.telefone,
+            [LEAD_FIELDS.ebook]: book.titulo,
           }),
           signal: ctrl.signal,
         });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         saveLead(d);
         showDone(d);
       } catch (err) {
