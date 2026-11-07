@@ -26,9 +26,9 @@
   // arquivo: caminho do PDF (ex.: 'assets/ebooks/acumulo-de-milhas.pdf') ou link externo.
   // Enquanto estiver vazio, depois do formulário o botão leva ao WhatsApp da Fran.
   const EBOOKS = {
-    'ebook-acumulo': { titulo: 'Acúmulo de milhas no dia a dia', arquivo: '' },
-    'ebook-cartoes': { titulo: 'Cartões, benefícios e programas', arquivo: '' },
-    'ebook-uso': { titulo: 'Uso, transferência e avaliação de pontos', arquivo: '' },
+    'ebook-acumulo': { titulo: 'Acúmulo de milhas no dia a dia', arquivo: 'assets/ebooks/Ebook_01_Acumulo_de_Milhas_no_Dia_a_Dia.pdf' },
+    'ebook-cartoes': { titulo: 'Cartões, benefícios e programas', arquivo: 'assets/ebooks/Ebook_02_Cartoes_Beneficios_e_Programas.pdf' },
+    'ebook-uso': { titulo: 'Uso, transferência e avaliação de pontos', arquivo: 'assets/ebooks/Ebook_03_Uso_Transferencia_e_Avaliacao_de_Pontos.pdf' },
   };
 
   const WA_MESSAGES = {

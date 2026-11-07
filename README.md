@@ -44,7 +44,6 @@ Ao alterar `css/style.css` ou `js/main.js`, aumente o número de versão (`?v=`)
 
 - Link/checkout e preço do curso online avulso.
 - Preço, link de adesão e condições da Comunidade Milhas com Fran.
-- Arquivos PDF dos 3 e-books (ver "E-books" acima).
 - Endereço completo da imersão e capacidade por turma.
 - Link oficial da página da Fran e demais canais sociais.
 - O vídeo de depoimento ainda é carregado do WordPress antigo (`depoimento_marcelosilverio.mov`, 85 MB): converter para MP4 e hospedar junto com o site antes de desligar o WordPress.
