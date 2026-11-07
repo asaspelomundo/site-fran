@@ -213,6 +213,10 @@
   const syncMbar = () => mbar.classList.toggle('is-visible', pastHero && !offerInView);
   new IntersectionObserver(([e]) => { pastHero = !e.isIntersecting && e.boundingClientRect.top < 0; syncMbar(); }).observe($('.hero'));
   new IntersectionObserver(([e]) => { offerInView = e.isIntersecting; syncMbar(); }, { threshold: 0.15 }).observe($('#imersao'));
+  // altura da barra do celular: o botão fixo do WhatsApp sobe para ficar logo acima dela
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(() => html.style.setProperty('--mbar-h', `${mbar.offsetHeight}px`)).observe(mbar);
+  }
 
   const onScroll = (y) => { onScrollHeader(y); onScrollHud(y); };
   window.addEventListener('scroll', () => onScroll(window.scrollY), { passive: true });
