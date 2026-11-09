@@ -29,6 +29,13 @@ Cada cartão tem o botão **Pegar meu e-book**: abre um formulário no próprio 
 - **PDFs:** ficam em `assets/ebooks/` e são indicados em `arquivo`, em `EBOOKS` (mesmo arquivo). Se `arquivo` ficar vazio, depois do formulário o botão leva ao WhatsApp da Fran.
 - **Atualizar um e-book:** substitua o PDF em `assets/ebooks/` mantendo o mesmo nome de arquivo; não é preciso mexer no código. A Vercel não deixa o PDF antigo guardado no navegador, então a versão nova vale assim que a publicação termina. Versão atual: edição revisada de novembro de 2026, 8 páginas cada (atualizada em 09/11/2026).
 
+## Ícone e prévia no WhatsApp
+
+- **Ícone (aba e iPhone):** `assets/favicon.png` (redondo) e `assets/apple-touch-icon.png` (quadrado). Usam as cores do site: o carvão `#1f2121` com o selo branco. O vermelho forte saiu a pedido da Fran (09/11).
+- **Prévia ao compartilhar o link:** `og:image` é `assets/og-icone.png` (256×256, redonda), e `twitter:card` é `summary`. Com imagem pequena e quadrada, o WhatsApp mostra a "bolinha" com o texto ao lado. A `og:image` antiga apontava para o WordPress, que saiu do ar.
+- O WhatsApp guarda a prévia de um link já enviado. Para conferir uma mudança, mande o link com algo no final (ex.: `https://www.francarrillo.com.br/?v=2`).
+- **Pendente:** o vídeo de depoimento (Marcelo Silvério) ainda aponta para o WordPress antigo (`wp-content/.../depoimento_marcelosilverio.mov`), que não existe mais. Falta o arquivo do vídeo, convertido para MP4, para hospedar no próprio site.
+
 ## Atualizar as turmas da imersão
 
 No `index.html`, procure por "Escolha sua turma". Cada turma é um `<label class="dep">` com:
