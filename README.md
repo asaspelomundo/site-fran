@@ -31,7 +31,7 @@ Cada cartão tem o botão **Pegar meu e-book**: abre um formulário no próprio 
 
 ## Ícone e prévia no WhatsApp
 
-- **Ícone (aba e iPhone):** `assets/favicon.png` (redondo) e `assets/apple-touch-icon.png` (quadrado). Usam as cores do site: o carvão `#1f2121` com o selo branco. O vermelho forte saiu a pedido da Fran (09/11).
+- **Ícone (aba e iPhone):** `assets/favicon.png` (redondo) e `assets/apple-touch-icon.png` (quadrado). Vermelho mais leve, `#f05454`, com o selo branco. O vermelho forte (`#ff1a1a`) saiu a pedido da Fran (09/11); o carvão também foi testado e não agradou.
 - **Prévia ao compartilhar o link:** `og:image` é `assets/og-icone.png` (256×256, redonda), e `twitter:card` é `summary`. Com imagem pequena e quadrada, o WhatsApp mostra a "bolinha" com o texto ao lado. A `og:image` antiga apontava para o WordPress, que saiu do ar.
 - O WhatsApp guarda a prévia de um link já enviado. Para conferir uma mudança, mande o link com algo no final (ex.: `https://www.francarrillo.com.br/?v=2`).
 - **Pendente:** o vídeo de depoimento (Marcelo Silvério) ainda aponta para o WordPress antigo (`wp-content/.../depoimento_marcelosilverio.mov`), que não existe mais. Falta o arquivo do vídeo, convertido para MP4, para hospedar no próprio site.
