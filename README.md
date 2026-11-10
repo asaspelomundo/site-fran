@@ -27,7 +27,7 @@ Cada cartão tem o botão **Pegar meu e-book**: abre um formulário no próprio 
 - **Aviso de novos pedidos:** no Google Forms, aba Respostas → ⋮ → "Receber notificações por e-mail para novas respostas".
 - **Não apague nem recrie as perguntas** (nome, email, telefone, ebook): cada uma tem um código (`entry.…`) usado em `LEAD_FIELDS`, no topo de `js/main.js`. Mudar o texto da pergunta não tem problema.
 - **PDFs:** ficam em `assets/ebooks/` e são indicados em `arquivo`, em `EBOOKS` (mesmo arquivo). Se `arquivo` ficar vazio, depois do formulário o botão leva ao WhatsApp da Fran.
-- **Atualizar um e-book:** substitua o PDF em `assets/ebooks/` mantendo o mesmo nome de arquivo; não é preciso mexer no código. A Vercel não deixa o PDF antigo guardado no navegador, então a versão nova vale assim que a publicação termina. Versão atual: guia introdutório de novembro de 2026, 3 páginas cada (atualizada em 09/11/2026, à noite).
+- **Atualizar um e-book:** substitua o PDF em `assets/ebooks/` mantendo o mesmo nome de arquivo; não é preciso mexer no código. A Vercel não deixa o PDF antigo guardado no navegador, então a versão nova vale assim que a publicação termina. Versão atual: guia introdutório de novembro de 2026, 4 páginas cada (atualizada em 09/11/2026, às 22h40).
 
 ## Ícone e prévia no WhatsApp
 
